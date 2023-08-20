@@ -3,16 +3,17 @@ package parser
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/beevik/etree"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/pkg/errors"
-	"github.com/spf13/cast"
-	"golang.org/x/text/encoding/simplifiedchinese"
-	"golang.org/x/text/transform"
 	"io"
 	"math/rand"
 	"strings"
 	"time"
+
+	"github.com/beevik/etree"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/pkg/errors"
+	"github.com/spf13/cast"
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/transform"
 )
 
 type QueryType string

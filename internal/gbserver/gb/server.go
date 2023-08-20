@@ -1,11 +1,11 @@
 package gb
 
 import (
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver/storage/mysql"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/gbsip"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/option"
 	"github.com/ghettovoice/gosip/sip"
+	"github.com/inysc/GB28181/internal/gbserver/storage/mysql"
+	"github.com/inysc/GB28181/internal/pkg/gbsip"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/option"
 )
 
 type Server struct {

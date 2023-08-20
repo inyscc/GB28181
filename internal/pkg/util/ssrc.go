@@ -2,9 +2,10 @@ package util
 
 import (
 	"fmt"
-	"github.com/chenjianhao66/go-GB28181/internal/config"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model/constant"
 	"sync"
+
+	"github.com/inysc/GB28181/internal/config"
+	"github.com/inysc/GB28181/internal/pkg/model/constant"
 )
 
 type ssrc struct {

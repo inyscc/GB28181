@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/log"
 )
 
 type TaskType string

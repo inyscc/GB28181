@@ -5,12 +5,12 @@ import (
 	"strings"
 
 	"github.com/beevik/etree"
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver/storage/cache"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model/constant"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/parser"
 	"github.com/ghettovoice/gosip/sip"
+	"github.com/inysc/GB28181/internal/gbserver/storage/cache"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/model"
+	"github.com/inysc/GB28181/internal/pkg/model/constant"
+	"github.com/inysc/GB28181/internal/pkg/parser"
 	"github.com/pkg/errors"
 )
 

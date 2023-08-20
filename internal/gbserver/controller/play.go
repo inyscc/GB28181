@@ -1,10 +1,10 @@
 package controller
 
 import (
-	srv "github.com/chenjianhao66/go-GB28181/internal/gbserver/service"
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver/storage"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
 	"github.com/gin-gonic/gin"
+	srv "github.com/inysc/GB28181/internal/gbserver/service"
+	"github.com/inysc/GB28181/internal/gbserver/storage"
+	"github.com/inysc/GB28181/internal/pkg/log"
 )
 
 // PlayController 设备控制器

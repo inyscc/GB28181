@@ -3,11 +3,11 @@ package gb
 import (
 	"time"
 
-	st "github.com/chenjianhao66/go-GB28181/internal/gbserver/storage"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/cron"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/gbsip"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model"
+	st "github.com/inysc/GB28181/internal/gbserver/storage"
+	"github.com/inysc/GB28181/internal/pkg/cron"
+	"github.com/inysc/GB28181/internal/pkg/gbsip"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/model"
 )
 
 type data struct {

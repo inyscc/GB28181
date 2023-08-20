@@ -1,8 +1,8 @@
 package gbctl
 
 import (
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/app"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/app"
+	"github.com/inysc/GB28181/internal/pkg/log"
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
 )
@@ -12,7 +12,7 @@ const description = `这是一个实现了国标标准的模拟摄像头，它�
 	1. 注册与注销功能
 
 后续还有其他功能等待支持，如果该程序有帮到你的话请去仓库给作者点一个Start吧~
-	https://github.com/chenjianhao66/go-GB28181
+	https://github.com/inysc/GB28181
 `
 
 func NewApp(basename string) *app.App {

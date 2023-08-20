@@ -2,14 +2,15 @@ package gbserver
 
 import (
 	"context"
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver/gb"
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver/storage/cache"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"golang.org/x/sync/errgroup"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/inysc/GB28181/internal/gbserver/gb"
+	"github.com/inysc/GB28181/internal/gbserver/storage/cache"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"golang.org/x/sync/errgroup"
 )
 
 type Server struct {

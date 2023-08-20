@@ -9,10 +9,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model/constant"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/option"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/util"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/model/constant"
+	"github.com/inysc/GB28181/internal/pkg/option"
+	"github.com/inysc/GB28181/internal/pkg/util"
 	"github.com/pkg/errors"
 	"github.com/redis/go-redis/v9"
 )

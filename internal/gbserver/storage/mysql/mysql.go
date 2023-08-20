@@ -2,18 +2,19 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver/storage"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/option"
-	"github.com/spf13/viper"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 	log2 "log"
 	"os"
 	"sync"
 	"time"
+
+	"github.com/inysc/GB28181/internal/gbserver/storage"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/model"
+	"github.com/inysc/GB28181/internal/pkg/option"
+	"github.com/spf13/viper"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type datastore struct {

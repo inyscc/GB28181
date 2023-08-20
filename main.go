@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "github.com/chenjianhao66/go-GB28181/api/swagger"
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver"
+	_ "github.com/inysc/GB28181/api/swagger"
+	"github.com/inysc/GB28181/internal/gbserver"
 )
 
 // @title           Go-GB28181项目前端APi接口
@@ -11,7 +11,7 @@ import (
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   github homepage
-// @contact.url    https://github.com/chenjianhao66/go-GB28181
+// @contact.url    https://github.com/inysc/GB28181
 // @contact.email  jianhao_c@qq.com
 
 // @license.name  Apache 2.0

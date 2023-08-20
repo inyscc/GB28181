@@ -1,10 +1,11 @@
 package service
 
 import (
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver/storage"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model"
 	"time"
+
+	"github.com/inysc/GB28181/internal/gbserver/storage"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/model"
 )
 
 type IDevice interface {

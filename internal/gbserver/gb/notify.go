@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/cron"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/parser"
 	"github.com/ghettovoice/gosip/sip"
+	"github.com/inysc/GB28181/internal/pkg/cron"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/model"
+	"github.com/inysc/GB28181/internal/pkg/parser"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
 )

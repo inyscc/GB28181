@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model"
 	"github.com/ghettovoice/gosip/sip"
+	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/sirupsen/logrus"
 )
 

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/cron"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/gbsip"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/parser"
 	"github.com/ghettovoice/gosip/sip"
+	"github.com/inysc/GB28181/internal/pkg/cron"
+	"github.com/inysc/GB28181/internal/pkg/gbsip"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/parser"
 )
 
 const (
@@ -47,7 +47,7 @@ func RegisterHandler(req sip.Request, tx sip.ServerTransaction) {
 			offlineFlag = true
 		}
 		device.Expires = expires.Value()
-		log.Infof("设备信息:  %+v\n", 	)
+		log.Infof("设备信息:  %+v\n")
 		// 发送OK信息
 		resp := sip.NewResponseFromRequest("", req, http.StatusOK, "ok", "")
 		log.Debugf("发送OK信息\n%s", resp)

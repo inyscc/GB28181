@@ -1,4 +1,4 @@
-module github.com/chenjianhao66/go-GB28181
+module github.com/inysc/GB28181
 
 go 1.19
 

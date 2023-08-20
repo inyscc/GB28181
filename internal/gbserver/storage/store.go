@@ -1,6 +1,6 @@
 package storage
 
-import "github.com/chenjianhao66/go-GB28181/internal/pkg/model"
+import "github.com/inysc/GB28181/internal/pkg/model"
 
 // Factory defines the factory storage interface
 type Factory interface {

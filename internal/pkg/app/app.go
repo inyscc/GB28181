@@ -3,12 +3,13 @@ package app
 import (
 	"flag"
 	"fmt"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/option"
-	"github.com/fatih/color"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"os"
 	"strings"
+
+	"github.com/fatih/color"
+	"github.com/inysc/GB28181/internal/pkg/option"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 type App struct {

@@ -1,9 +1,10 @@
 package syn
 
 import (
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/pkg/errors"
 	"time"
+
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/pkg/errors"
 )
 
 // todo 等待重构

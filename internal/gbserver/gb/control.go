@@ -3,11 +3,12 @@ package gb
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/gbsip"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/parser"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/syn"
+
 	"github.com/ghettovoice/gosip/sip"
+	"github.com/inysc/GB28181/internal/pkg/gbsip"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/parser"
+	"github.com/inysc/GB28181/internal/pkg/syn"
 )
 
 func deviceConfigQueryHandler(req sip.Request, tx sip.ServerTransaction) {

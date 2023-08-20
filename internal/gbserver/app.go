@@ -1,14 +1,14 @@
 package gbserver
 
 import (
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/app"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/app"
+	"github.com/inysc/GB28181/internal/pkg/log"
 )
 
 const description = `基于GB28181-2016标准实现的网络视频平台，用 Go 语言实现，实现了 SIP 协议和信令服务器。
 
 后续还有其他功能等待支持，如果该程序有帮到你的话请去仓库给作者点一个Start吧~
-	https://github.com/chenjianhao66/go-GB28181
+	https://github.com/inysc/GB28181
 `
 
 const banner = `

@@ -1,11 +1,11 @@
 package controller
 
 import (
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver/service"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/gbsip"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model"
 	"github.com/gin-gonic/gin"
+	"github.com/inysc/GB28181/internal/gbserver/service"
+	"github.com/inysc/GB28181/internal/pkg/gbsip"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/pkg/errors"
 )
 

@@ -3,11 +3,12 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/chenjianhao66/go-GB28181/internal/gbserver/storage/cache"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/gbsip"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model/constant"
+
+	"github.com/inysc/GB28181/internal/gbserver/storage/cache"
+	"github.com/inysc/GB28181/internal/pkg/gbsip"
+	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/model"
+	"github.com/inysc/GB28181/internal/pkg/model/constant"
 	"github.com/pkg/errors"
 )
 

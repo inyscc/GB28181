@@ -2,9 +2,10 @@ package model
 
 import (
 	"fmt"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/model/constant"
-	"github.com/spf13/cast"
 	"time"
+
+	"github.com/inysc/GB28181/internal/pkg/model/constant"
+	"github.com/spf13/cast"
 )
 
 // MediaDetail 流媒体明细
