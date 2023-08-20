@@ -1,11 +1,11 @@
 package cron
 
 import (
+	"errors"
 	"fmt"
-	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
-	"github.com/pkg/errors"
-	"sync"
 	"time"
+
+	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
 )
 
 type TaskType string
@@ -27,7 +27,9 @@ type taskSchedule map[string]map[TaskType]task
 // key: deviceId, value: {key: taskType, value: task Object}
 var taskList taskSchedule = make(map[string]map[TaskType]task)
 
-var once sync.Once
+var (
+	ErrNotFoud = errors.New("任务不存在")
+)
 
 func (t taskSchedule) deleteOneTask(deviceId string, taskType TaskType) {
 	delete(t[deviceId], taskType)
@@ -79,7 +81,7 @@ func StopTask(deviceId string, taskType TaskType) error {
 func StartTask(deviceId string, taskType TaskType, duration time.Duration, runFunc runFunc) error {
 	if taskList.getOneTask(deviceId, taskType) != nil {
 		log.Errorf("任务 %+v 已经存在！", taskType)
-		return errors.New(fmt.Sprintf("开启任务，任务类型: %+v, 设备ID: %+v", taskType, deviceId))
+		return fmt.Errorf("开启任务，任务类型: %+v, 设备ID: %+v", taskType, deviceId)
 	}
 
 	t, err := createTask(deviceId, taskType, duration, runFunc)
@@ -93,7 +95,6 @@ func StartTask(deviceId string, taskType TaskType, duration time.Duration, runFu
 
 func ResetTime(deviceId string, taskType TaskType) error {
 	t, err := getTask(deviceId, taskType)
-
 	if err != nil {
 		return err
 	}
@@ -106,22 +107,21 @@ func ResetTime(deviceId string, taskType TaskType) error {
 func getTask(deviceId string, taskType TaskType) (task, error) {
 	if taskList.getAllTasksForOneDevice(deviceId) == nil {
 		log.Errorf("任务 %+v 设备ID: %+v 不存在!", taskType, deviceId)
-		return nil, errors.New(fmt.Sprintf("停止任务，任务类型: %+v, 设备ID: %+v", taskType, deviceId))
-	}
-
-	if taskList.getOneTask(deviceId, taskType) == nil {
-		log.Errorf("任务 %+v 设备ID: %+v 不存在!", taskType, deviceId)
-		return nil, errors.New(fmt.Sprintf("停止任务，任务类型: %+v, 设备ID: %+v", taskType, deviceId))
+		return nil, ErrNotFoud
 	}
 
 	t := taskList.getOneTask(deviceId, taskType)
+	if t == nil {
+		log.Errorf("任务 %+v 设备ID: %+v 不存在!", taskType, deviceId)
+		return nil, ErrNotFoud
+	}
 
 	return t, nil
 }
 
 func createTask(deviceId string, taskType TaskType, duration time.Duration, runFunc runFunc) (task, error) {
 	if taskList.getOneTask(deviceId, taskType) != nil {
-		return nil, errors.New(fmt.Sprintf("获取任务对象失败, 任务类型: %+v", taskType))
+		return nil, fmt.Errorf("获取任务对象失败, 任务类型: %+v", taskType)
 	}
 
 	taskList.initTaskList(deviceId)
@@ -140,8 +140,7 @@ func createTask(deviceId string, taskType TaskType, duration time.Duration, runF
 
 	default:
 		log.Errorf("不支持的任务类型：", taskType)
-		return nil, errors.New(fmt.Sprintf("不支持的任务类型: %+v, 设备ID: %+v",
-			taskType, deviceId))
+		return nil, fmt.Errorf("不支持的任务类型: %+v, 设备ID: %+v", taskType, deviceId)
 	}
 
 	return t, nil

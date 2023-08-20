@@ -5,9 +5,11 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/chenjianhao66/go-GB28181/internal/pkg/cron"
 	"github.com/chenjianhao66/go-GB28181/internal/pkg/log"
+	"github.com/chenjianhao66/go-GB28181/internal/pkg/model"
 	"github.com/chenjianhao66/go-GB28181/internal/pkg/parser"
 	"github.com/ghettovoice/gosip/sip"
 	"golang.org/x/text/encoding/simplifiedchinese"
@@ -52,7 +54,17 @@ func keepaliveNotifyHandler(req sip.Request, tx sip.ServerTransaction) {
 	if err := storage.deviceKeepalive(device.ID); err != nil {
 		log.Debugf("{%d,%s}更新心跳失败：%v", device.ID, device.DeviceId, err.Error())
 	}
-	if err := cron.ResetTime(device.DeviceId, cron.TaskKeepLive); err != nil {
+	err := cron.ResetTime(device.DeviceId, cron.TaskKeepLive)
+	switch err {
+	case nil:
+	case cron.ErrNotFoud:
+		err = cron.StartTask(device.DeviceId, cron.TaskKeepLive, 10*time.Second, func() {
+			storage.s.Devices().Update(model.Device{DeviceId: device.DeviceId, Offline: 0})
+		})
+		if err != nil {
+			log.Errorf("启动定时任务失败：%s", err)
+		}
+	default:
 		log.Errorf("{%d,%s}更新心跳失败：%v", device.ID, device.DeviceId, err.Error())
 	}
 
