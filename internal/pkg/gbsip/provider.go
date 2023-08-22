@@ -10,7 +10,7 @@ import (
 	"github.com/ghettovoice/gosip/sip"
 	"github.com/inysc/GB28181/internal/config"
 	"github.com/inysc/GB28181/internal/gbserver/storage/cache"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/pkg/errors"
 	"github.com/spf13/cast"
@@ -48,7 +48,7 @@ func (f sipFactory) createMessageRequest(d model.Device, body string) sip.Reques
 
 	ceq, err := cache.GetCeq()
 	if err != nil {
-		log.Error("get ceq in cache fail,", err)
+		logger.Error("get ceq in cache fail,", err)
 	} else {
 		requestBuilder.SetSeqNo(cast.ToUint(ceq))
 	}
@@ -77,7 +77,7 @@ func (f sipFactory) createInviteRequest(device model.Device, detail model.MediaD
 	requestBuilder.SetBody(body)
 	ceq, err := cache.GetCeq()
 	if err != nil {
-		log.Error("get ceq in cache fail,", err)
+		logger.Error("get ceq in cache fail,", err)
 	} else {
 		requestBuilder.SetSeqNo(cast.ToUint(ceq))
 	}
@@ -90,7 +90,7 @@ func (f sipFactory) createInviteRequest(device model.Device, detail model.MediaD
 	requestBuilder.AddHeader(&header)
 	request, err := requestBuilder.Build()
 	if err != nil {
-		log.Error("发生错误：", err)
+		logger.Error("发生错误：", err)
 		return nil
 	}
 
@@ -124,7 +124,7 @@ func (f sipFactory) createSubscribeRequest(device model.Device, body, event stri
 	// ceq
 	ceq, err := cache.GetCeq()
 	if err != nil {
-		log.Error("get ceq in cache fail,", err)
+		logger.Error("get ceq in cache fail,", err)
 		builder.SetSeqNo(cast.ToUint(rand.Uint32()))
 	} else {
 		builder.SetSeqNo(cast.ToUint(ceq))
@@ -144,7 +144,7 @@ func (f sipFactory) createSubscribeRequest(device model.Device, body, event stri
 	builder.AddHeader(eventHeader)
 	request, err := builder.Build()
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return nil, err
 	}
 	return request, nil
@@ -164,7 +164,7 @@ func (f sipFactory) createByeRequest(channelId string, device model.Device, tx S
 	callID := sip.CallID(tx.CallId)
 	ceq, err := cache.GetCeq()
 	if err != nil {
-		log.Error("get ceq in cache fail,", err)
+		logger.Error("get ceq in cache fail,", err)
 		ceq = 0
 	}
 
@@ -220,7 +220,7 @@ func newParams(m map[string]string) sip.Params {
 func newVia(transport string) *sip.ViaHop {
 	port, err := strconv.ParseInt(config.SIPPort(), 10, 64)
 	if err != nil {
-		log.Error("解析Via头部端口失败", err)
+		logger.Error("解析Via头部端口失败", err)
 	}
 	p := sip.Port(port)
 
@@ -270,7 +270,7 @@ func getResponse(tx sip.ClientTransaction) sip.Response {
 			}
 			return resp
 		case <-timer.C:
-			log.Error("获取响应超时")
+			logger.Error("获取响应超时")
 			return nil
 		}
 	}

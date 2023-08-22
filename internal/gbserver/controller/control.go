@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/inysc/GB28181/internal/gbserver/service"
 	"github.com/inysc/GB28181/internal/pkg/gbsip"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/pkg/errors"
 )
@@ -34,7 +34,7 @@ func NewControlController() *ControlController {
 func (c ControlController) ControlPTZ(ctx *gin.Context) {
 	var data model.DeviceControl
 	if err := ctx.ShouldBindJSON(&data); err != nil {
-		log.Error(err)
+		logger.Error(err)
 		newResponse(ctx).fail(errDataBindStructFail.Error())
 		return
 	}

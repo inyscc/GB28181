@@ -9,7 +9,7 @@ import (
 
 	"github.com/inysc/GB28181/internal/gbserver/gb"
 	"github.com/inysc/GB28181/internal/gbserver/storage/cache"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -46,9 +46,9 @@ func (s *Server) Run() error {
 	go func() {
 		<-closeCh
 		if err := s.Close(); err != nil {
-			log.Error(err)
+			logger.Error(err)
 		}
-		log.Info("gbserver shutdown....")
+		logger.Info("gbserver shutdown....")
 	}()
 	cache.InitCache(s.opt.RedisOption)
 	s.apiServer.initRoute()
@@ -56,7 +56,7 @@ func (s *Server) Run() error {
 	defer ctx.Done()
 
 	eg.Go(func() error {
-		log.Infof("bind: %s,start listening...", s.apiServer.h.Addr)
+		logger.Infof("bind: %s,start listening...", s.apiServer.h.Addr)
 		if err := s.apiServer.h.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			panic(err)
 		}

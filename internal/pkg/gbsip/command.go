@@ -7,7 +7,7 @@ import (
 	"github.com/beevik/etree"
 	"github.com/ghettovoice/gosip/sip"
 	"github.com/inysc/GB28181/internal/gbserver/storage/cache"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/inysc/GB28181/internal/pkg/model/constant"
 	"github.com/inysc/GB28181/internal/pkg/parser"
@@ -37,10 +37,10 @@ func DeviceInfoQuery(d model.Device) {
 	body, _ := document.WriteToString()
 
 	request := sipRequestFactory.createMessageRequest(d, body)
-	log.Debugf("查询设备信息请求：\n%s", request)
+	logger.Debugf("查询设备信息请求：\n%s", request)
 	resp, _ := c.server.sendRequest(request)
 	if resp != nil {
-		log.Debugf("收到设备查询响应：\n%s", <-resp.Responses())
+		logger.Debugf("收到设备查询响应：\n%s", <-resp.Responses())
 	}
 	DeviceCatalogQuery(d)
 }
@@ -52,13 +52,13 @@ func DeviceCatalogQuery(device model.Device) {
 	}
 
 	request := sipRequestFactory.createMessageRequest(device, xml)
-	log.Debugf("发送设备目录查询信息：\n%s", request)
+	logger.Debugf("发送设备目录查询信息：\n%s", request)
 	resp, err := c.server.sendRequest(request)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 	}
 	if resp != nil {
-		log.Debugf("收到设备目录查询响应：\n%s", <-resp.Responses())
+		logger.Debugf("收到设备目录查询响应：\n%s", <-resp.Responses())
 	}
 }
 
@@ -68,10 +68,10 @@ func DeviceBasicConfig(req *model.DeviceBasicConfigDto) error {
 		return errors.Wrap(err, "创建设备配置请求失败")
 	}
 	request := sipRequestFactory.createMessageRequest(req.Device, xml)
-	log.Debugf("查询设备基本配置请求：\n%s", request)
+	logger.Debugf("查询设备基本配置请求：\n%s", request)
 	tx, err := c.server.sendRequest(request)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return err
 	}
 	response := getResponse(tx)
@@ -89,7 +89,7 @@ func DeviceBasicConfigQuery(d model.Device) error {
 	request := sipRequestFactory.createMessageRequest(d, xml)
 	_, err = c.server.sendRequest(request)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return err
 	}
 	return nil
@@ -103,7 +103,7 @@ func DeviceStatusQuery(d model.Device) error {
 	request := sipRequestFactory.createMessageRequest(d, xml)
 	_, err = c.server.sendRequest(request)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return err
 	}
 	return nil
@@ -118,18 +118,18 @@ func AlarmSubscribe(device model.Device) error {
 	if err != nil {
 		return errors.Wrap(err, "创建报警订阅请求失败")
 	}
-	log.Debug("报警订阅请求：\n", request)
+	logger.Debug("报警订阅请求：\n", request)
 	tx, err := c.server.sendRequest(request)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return errors.Wrap(err, "发送请求失败")
 	}
 	response := getResponse(tx)
 	if response == nil || !response.IsSuccess() {
-		log.Error("发送请求失败")
+		logger.Error("发送请求失败")
 		return errors.New("发送请求失败2")
 	}
-	log.Debug("报警订阅请求响应:\n", response)
+	logger.Debug("报警订阅请求响应:\n", response)
 	return nil
 }
 
@@ -144,12 +144,12 @@ func CatalogSubscribe(device model.Device) error {
 	}
 	tx, err := c.server.sendRequest(request)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return errors.Wrap(err, "发送目录订阅请求失败")
 	}
 	response := getResponse(tx)
 	if response == nil || !response.IsSuccess() {
-		log.Error("接收目录订阅消息确认超时")
+		logger.Error("接收目录订阅消息确认超时")
 		return errors.New("接收目录订阅消息确认超时")
 	}
 	return nil
@@ -166,29 +166,29 @@ func MobilePositionSubscribe(device model.Device) error {
 	}
 	tx, err := c.server.sendRequest(request)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return errors.Wrap(err, "发送设备移动位置订阅请求失败")
 	}
 	response := getResponse(tx)
 	if response == nil || !response.IsSuccess() {
-		log.Error("接收设备移动位置订阅确认超时")
+		logger.Error("接收设备移动位置订阅确认超时")
 		return errors.New("接收设备移动位置订阅确认超时")
 	}
 	return nil
 }
 
 func Play(device model.Device, detail model.MediaDetail, streamId, ssrc string, channelId string, rtpPort int) (model.StreamInfo, error) {
-	log.Debugf("点播开始，流id: %c, 设备ip: %c, SSRC: %c, rtp端口: %d\n", streamId, device.Ip, ssrc, rtpPort)
+	logger.Debugf("点播开始，流id: %c, 设备ip: %c, SSRC: %c, rtp端口: %d\n", streamId, device.Ip, ssrc, rtpPort)
 	request := sipRequestFactory.createInviteRequest(device, detail, channelId, ssrc, rtpPort)
-	log.Debugf("发送invite请求：\n%s", request)
+	logger.Debugf("发送invite请求：\n%s", request)
 	tx, err := c.server.sendRequest(request)
 	if err != nil {
 		return model.StreamInfo{}, err
 	}
 
 	resp := getResponse(tx)
-	log.Debugf("收到invite响应：\n%s", resp)
-	log.Debugf("\ntransaction key: %s", tx.Key().String())
+	logger.Debugf("收到invite响应：\n%s", resp)
+	logger.Debugf("\ntransaction key: %s", tx.Key().String())
 
 	ackRequest := sip.NewAckRequest("", request, resp, "", nil)
 	ackRequest.SetRecipient(request.Recipient())
@@ -197,10 +197,10 @@ func Play(device model.Device, detail model.MediaDetail, streamId, ssrc string, 
 		Params:  nil,
 	})
 
-	log.Debugf("发送ack确认：%s\n", ackRequest)
+	logger.Debugf("发送ack确认：%s\n", ackRequest)
 	err = c.server.s.Send(ackRequest)
 	if err != nil {
-		log.Errorf("发送ack失败", err)
+		logger.Errorf("发送ack失败", err)
 		return model.StreamInfo{}, errors.WithMessage(err, "send play SipOption ack request fail")
 	}
 
@@ -237,7 +237,7 @@ func StopPlay(streamId, channelId string, device model.Device) error {
 		return err
 	}
 
-	log.Debugf("创建Bye请求：\n%s", byeRequest)
+	logger.Debugf("创建Bye请求：\n%s", byeRequest)
 	key = fmt.Sprintf("%s:%s", constant.StreamTransactionPrefix, streamId)
 	err = cache.Del(key)
 	if err != nil {
@@ -247,13 +247,13 @@ func StopPlay(streamId, channelId string, device model.Device) error {
 	//err = s.s.Send(byeRequest)
 	tx, err := c.server.sendRequest(byeRequest)
 	if err != nil {
-		log.Error("发送请求发生错误,", err)
+		logger.Error("发送请求发生错误,", err)
 	}
 
 	response := getResponse(tx)
 
 	if response == nil {
-		log.Error("response is nil")
+		logger.Error("response is nil")
 	}
 	return nil
 }
@@ -310,21 +310,21 @@ func ControlPTZ(d model.Device, channelId, command string, params1, params2, com
 
 	cmdStr, err := createPTZCode(command, params1, params2, combineCode)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return err
 	}
 
 	xml, err := parser.CreateControlXml(parser.DeviceControl, channelId, parser.WithPTZCmd(cmdStr))
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return err
 	}
 
 	request := sipRequestFactory.createMessageRequest(d, xml)
-	log.Info(request)
+	logger.Info(request)
 	_, err = c.server.sendRequest(request)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return err
 	}
 
@@ -387,7 +387,7 @@ func createPTZCode(command string, params1, params2, combineCode int) (string, e
 	// 根据gb标准，字节4用于表示云台的镜头缩小、镜头放大、上、下、左、右，写入指令码的16进制数
 	ptz.WriteString(fmt.Sprintf("%02X", cmd))
 
-	log.Debug("合并字节4之后：" + ptz.String())
+	logger.Debug("合并字节4之后：" + ptz.String())
 
 	// 根据gb标准，字节5用于表示水平控制速度，写入水平控制方向速度的十六进制数
 	ptz.WriteString(fmt.Sprintf("%02X", params1))
@@ -403,6 +403,6 @@ func createPTZCode(command string, params1, params2, combineCode int) (string, e
 	// 字节8用于校验位，根据gb标准，校验位=(字节1+字节2+字节3+字节4+字节5+字节6+字节7) % 256
 	checkCode := (0xA5 + 0x0F + 0x01 + cmd + params1 + params2 + c) % 0x100
 	ptz.WriteString(fmt.Sprintf("%02X", checkCode))
-	log.Debug("最终生成的PTZCmd: " + ptz.String())
+	logger.Debug("最终生成的PTZCmd: " + ptz.String())
 	return ptz.String(), nil
 }

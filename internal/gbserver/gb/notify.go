@@ -9,7 +9,7 @@ import (
 
 	"github.com/ghettovoice/gosip/sip"
 	"github.com/inysc/GB28181/internal/pkg/cron"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/inysc/GB28181/internal/pkg/parser"
 	"golang.org/x/text/encoding/simplifiedchinese"
@@ -35,7 +35,7 @@ func keepaliveNotifyHandler(req sip.Request, tx sip.ServerTransaction) {
 		return input, nil
 	}
 	if err := decoder.Decode(&keepalive); err != nil {
-		log.Debugf("keepalive 消息解析xml失败：%s", err)
+		logger.Debugf("keepalive 消息解析xml失败：%s", err)
 		return
 	}
 	device, ok := parser.DeviceFromRequest(req)
@@ -45,14 +45,14 @@ func keepaliveNotifyHandler(req sip.Request, tx sip.ServerTransaction) {
 	device, ok = storage.getDeviceById(device.DeviceId)
 	if !ok {
 		resp := sip.NewResponseFromRequest("", req, http.StatusNotFound, "device "+device.DeviceId+"not found", "")
-		log.Debugf("{%s}设备不存在\n%s", device.DeviceId, resp)
+		logger.Debugf("{%s}设备不存在\n%s", device.DeviceId, resp)
 		_ = tx.Respond(resp)
 		return
 	}
 
 	// 更新心跳时间
 	if err := storage.deviceKeepalive(device.ID); err != nil {
-		log.Debugf("{%d,%s}更新心跳失败：%v", device.ID, device.DeviceId, err.Error())
+		logger.Debugf("{%d,%s}更新心跳失败：%v", device.ID, device.DeviceId, err.Error())
 	}
 	err := cron.ResetTime(device.DeviceId, cron.TaskKeepLive)
 	switch err {
@@ -62,14 +62,14 @@ func keepaliveNotifyHandler(req sip.Request, tx sip.ServerTransaction) {
 			storage.s.Devices().Update(model.Device{DeviceId: device.DeviceId, Offline: 0})
 		})
 		if err != nil {
-			log.Errorf("启动定时任务失败：%s", err)
+			logger.Errorf("启动定时任务失败：%s", err)
 		}
 	default:
-		log.Errorf("{%d,%s}更新心跳失败：%v", device.ID, device.DeviceId, err.Error())
+		logger.Errorf("{%d,%s}更新心跳失败：%v", device.ID, device.DeviceId, err.Error())
 	}
 
 	resp := sip.NewResponseFromRequest("", req, http.StatusOK, http.StatusText(http.StatusOK), "")
-	log.Debugf("{%d,%s}收到心跳包\n%s", device.ID, device.DeviceId, resp)
+	logger.Debugf("{%d,%s}收到心跳包\n%s", device.ID, device.DeviceId, resp)
 	_ = tx.Respond(resp)
 }
 
@@ -89,14 +89,14 @@ func mobilePositionNotifyHandler(req sip.Request, tx sip.ServerTransaction) {
 func subscribeAlarmResponseHandler(req sip.Request, tx sip.ServerTransaction) {
 	r := parser.GetResultFromXML(req.Body())
 	if r == "" {
-		log.Error("获取不到响应信息中的Result字段")
+		logger.Error("获取不到响应信息中的Result字段")
 		return
 	}
 
 	if r == "ERROR" {
-		log.Error("订阅报警信息失败，请检查")
+		logger.Error("订阅报警信息失败，请检查")
 	} else {
-		log.Debug("订阅报警信息成功")
+		logger.Debug("订阅报警信息成功")
 	}
 	_ = responseAck(tx, req)
 }
@@ -104,14 +104,14 @@ func subscribeAlarmResponseHandler(req sip.Request, tx sip.ServerTransaction) {
 func subscribeMobilePositionResponseHandler(req sip.Request, tx sip.ServerTransaction) {
 	r := parser.GetResultFromXML(req.Body())
 	if r == "" {
-		log.Error("获取不到响应信息中的Result字段")
+		logger.Error("获取不到响应信息中的Result字段")
 		return
 	}
 
 	if r == "ERROR" {
-		log.Error("订阅设备移动位置信息失败，请检查")
+		logger.Error("订阅设备移动位置信息失败，请检查")
 	} else {
-		log.Debug("订阅设备移动位置信息信息成功")
+		logger.Debug("订阅设备移动位置信息信息成功")
 	}
 	_ = responseAck(tx, req)
 }

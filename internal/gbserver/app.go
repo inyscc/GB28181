@@ -2,7 +2,7 @@ package gbserver
 
 import (
 	"github.com/inysc/GB28181/internal/pkg/app"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 )
 
 const description = `基于GB28181-2016标准实现的网络视频平台，用 Go 语言实现，实现了 SIP 协议和信令服务器。
@@ -34,7 +34,7 @@ func NewApp(basename string) *app.App {
 
 func run(opt *GbOption) app.RunFunc {
 	return func(basename string) error {
-		log.Init(opt.LogOption)
+		logger.Init(opt.LogOption)
 		return NewServer(opt).Run()
 	}
 }

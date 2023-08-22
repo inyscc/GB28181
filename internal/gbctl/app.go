@@ -2,7 +2,7 @@ package gbctl
 
 import (
 	"github.com/inysc/GB28181/internal/pkg/app"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
 )
@@ -27,9 +27,9 @@ func NewApp(basename string) *app.App {
 
 func run(opt *ctlOption) app.RunFunc {
 	return func(basename string) error {
-		log.Init(opt.LogOption)
-		log.Info("exec gbctl success....")
-		log.Info(cast.ToString(viper.Get("sip.id")))
+		logger.Init(opt.LogOption)
+		logger.Info("exec gbctl success....")
+		logger.Info(cast.ToString(viper.Get("sip.id")))
 		return nil
 	}
 }

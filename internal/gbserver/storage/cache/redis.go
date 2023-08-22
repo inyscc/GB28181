@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model/constant"
 	"github.com/inysc/GB28181/internal/pkg/option"
 	"github.com/inysc/GB28181/internal/pkg/util"
@@ -44,7 +44,7 @@ func newRedis(opt *option.RedisOptions) *redisClient {
 			err,
 		))
 	}
-	log.Infof("connection to redis success,%v:%v\n", opt.Host, opt.Port)
+	logger.Infof("connection to redis success,%v:%v\n", opt.Host, opt.Port)
 	//fmt.Printf("connection to redis success,%s:%d\n", options.Host, options.Port)
 	rdb.AddHook(&redisHook{})
 	return &redisClient{
@@ -56,7 +56,7 @@ func newRedis(opt *option.RedisOptions) *redisClient {
 func (r *redisClient) Get(key string) (any, error) {
 	result, err := r.rdb.Get(context.Background(), key).Result()
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 	}
 	return result, err
 }
@@ -64,14 +64,14 @@ func (r *redisClient) Get(key string) (any, error) {
 func (r *redisClient) Set(key string, val any) {
 	b, _ := json.MarshalIndent(val, "", "  ")
 	if err := r.rdb.Set(context.Background(), key, b, redis.KeepTTL).Err(); err != nil {
-		log.Error(err)
+		logger.Error(err)
 	}
 }
 
 func (r *redisClient) Del(key string) error {
 	_, err := r.rdb.Del(context.Background(), key).Result()
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return errors.New(err.Error())
 	}
 	return err
@@ -93,7 +93,7 @@ func (r *redisHook) DialHook(next redis.DialHook) redis.DialHook {
 
 func (r *redisHook) ProcessHook(next redis.ProcessHook) redis.ProcessHook {
 	return func(ctx context.Context, cmd redis.Cmder) error {
-		log.Debugf("execute redis command:%s", fmtArgs(cmd.Args()))
+		logger.Debugf("execute redis command:%s", fmtArgs(cmd.Args()))
 		_ = next(ctx, cmd)
 		return nil
 	}
@@ -101,11 +101,11 @@ func (r *redisHook) ProcessHook(next redis.ProcessHook) redis.ProcessHook {
 
 func (r *redisHook) ProcessPipelineHook(next redis.ProcessPipelineHook) redis.ProcessPipelineHook {
 	return func(ctx context.Context, cmds []redis.Cmder) error {
-		log.Debugf("start execute redis pipe tx command, MULTI :\n")
+		logger.Debugf("start execute redis pipe tx command, MULTI :\n")
 		for _, c := range cmds {
-			log.Debugf("%s\n", c.FullName())
+			logger.Debugf("%s\n", c.FullName())
 		}
-		log.Debugf("end execute redis pipe tx command, EXEC :\n")
+		logger.Debugf("end execute redis pipe tx command, EXEC :\n")
 		_ = next(ctx, cmds)
 		return nil
 	}

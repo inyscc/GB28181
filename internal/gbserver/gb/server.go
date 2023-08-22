@@ -4,7 +4,7 @@ import (
 	"github.com/ghettovoice/gosip/sip"
 	"github.com/inysc/GB28181/internal/gbserver/storage/mysql"
 	"github.com/inysc/GB28181/internal/pkg/gbsip"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/option"
 )
 
@@ -40,7 +40,7 @@ func (s *Server) ListenUDP() error {
 
 func (s *Server) Close() error {
 	_ = s.server.Shutdown()
-	log.Info("gb server shutdown...")
+	logger.Info("gb server shutdown...")
 	return nil
 }
 

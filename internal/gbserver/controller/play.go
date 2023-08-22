@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	srv "github.com/inysc/GB28181/internal/gbserver/service"
 	"github.com/inysc/GB28181/internal/gbserver/storage"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 )
 
 // PlayController 设备控制器
@@ -34,7 +34,7 @@ func (p *PlayController) Play(c *gin.Context) {
 	channelId := c.Param("channelId")
 	streamInfo, err := p.srv.Play().Play(deviceId, channelId)
 	if err != nil {
-		log.Errorf("%+v", err)
+		logger.Errorf("%+v", err)
 		newResponse(c).fail(err.Error())
 		return
 	}

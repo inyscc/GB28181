@@ -3,7 +3,7 @@ package syn
 import (
 	"time"
 
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/pkg/errors"
 )
 
@@ -23,7 +23,7 @@ func (e *Entity) Wait() (interface{}, error) {
 	defer e.destroy()
 	select {
 	case err := <-e.err:
-		log.Error(err)
+		logger.Error(err)
 		return nil, err
 	case d := <-e.data:
 		return d, nil

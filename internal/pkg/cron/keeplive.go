@@ -3,7 +3,7 @@ package cron
 import (
 	"time"
 
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 )
 
 type keepLiveTask struct {
@@ -31,7 +31,7 @@ func (k *keepLiveTask) refresh() {
 
 func (k *keepLiveTask) watch() {
 	<-k.timer.C
-	log.Warnf("设备离线！ 设备号: %s, 时间: %s", k.deviceId, time.Now().String())
+	logger.Warnf("设备离线！ 设备号: %s, 时间: %s", k.deviceId, time.Now().String())
 	k.runFunc()
 	taskList.deleteOneTask(k.deviceId, TaskKeepLive)
 	return

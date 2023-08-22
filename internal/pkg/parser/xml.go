@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/beevik/etree"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/pkg/errors"
 	"github.com/spf13/cast"
 	"golang.org/x/text/encoding/simplifiedchinese"
@@ -53,7 +53,7 @@ func CreateQueryXML(cmd QueryType, deviceId string, kvs ...WithKeyValue) (string
 	document.Indent(2)
 	body, err := document.WriteToString()
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return "", errors.Wrap(err, "encoding catalog query request xml fail")
 	}
 	return body, nil
@@ -74,7 +74,7 @@ func CreateControlXml(cmd ControlType, deviceId string, kvs ...WithKeyValue) (st
 	document.Indent(2)
 	body, err := document.WriteToString()
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return "", errors.Wrap(err, "encoding device control request xml fail")
 	}
 	return body, nil
@@ -167,7 +167,7 @@ re:
 func GetResultFromXML(body string) string {
 	_, v, err := getSpecificFromXML(body, "Result")
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return ""
 	}
 	return v

@@ -11,7 +11,7 @@ import (
 	"github.com/inysc/GB28181/internal/gbserver/service"
 	"github.com/inysc/GB28181/internal/gbserver/storage"
 	"github.com/inysc/GB28181/internal/gbserver/storage/mysql"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/option"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -48,9 +48,9 @@ func (a *apiServer) Close() error {
 	ctx := context.Background()
 	withTimeout, cancelFunc := context.WithTimeout(ctx, 5*time.Second)
 	defer cancelFunc()
-	log.Info("apiserver shutdown...")
+	logger.Info("apiserver shutdown...")
 	if err := a.h.Shutdown(withTimeout); err != nil {
-		log.Info("close apiserver fail")
+		logger.Info("close apiserver fail")
 		panic(err)
 	}
 	return nil

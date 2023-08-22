@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 )
 
 type TaskType string
@@ -80,7 +80,7 @@ func StopTask(deviceId string, taskType TaskType) error {
 
 func StartTask(deviceId string, taskType TaskType, duration time.Duration, runFunc runFunc) error {
 	if taskList.getOneTask(deviceId, taskType) != nil {
-		log.Errorf("任务 %+v 已经存在！", taskType)
+		logger.Errorf("任务 %+v 已经存在！", taskType)
 		return fmt.Errorf("开启任务，任务类型: %+v, 设备ID: %+v", taskType, deviceId)
 	}
 
@@ -106,13 +106,13 @@ func ResetTime(deviceId string, taskType TaskType) error {
 
 func getTask(deviceId string, taskType TaskType) (task, error) {
 	if taskList.getAllTasksForOneDevice(deviceId) == nil {
-		log.Errorf("任务 %+v 设备ID: %+v 不存在!", taskType, deviceId)
+		logger.Errorf("任务 %+v 设备ID: %+v 不存在!", taskType, deviceId)
 		return nil, ErrNotFoud
 	}
 
 	t := taskList.getOneTask(deviceId, taskType)
 	if t == nil {
-		log.Errorf("任务 %+v 设备ID: %+v 不存在!", taskType, deviceId)
+		logger.Errorf("任务 %+v 设备ID: %+v 不存在!", taskType, deviceId)
 		return nil, ErrNotFoud
 	}
 
@@ -139,7 +139,7 @@ func createTask(deviceId string, taskType TaskType, duration time.Duration, runF
 		taskList.putOneTask(deviceId, taskType, t)
 
 	default:
-		log.Errorf("不支持的任务类型：", taskType)
+		logger.Errorf("不支持的任务类型：", taskType)
 		return nil, fmt.Errorf("不支持的任务类型: %+v, 设备ID: %+v", taskType, deviceId)
 	}
 

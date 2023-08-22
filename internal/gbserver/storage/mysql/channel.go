@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"gorm.io/gorm"
 )
@@ -33,7 +33,7 @@ func (c channelStorage) SaveBatch(channels []model.Channel, deviceId string) err
 	})
 
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return err
 	}
 	return nil
@@ -43,7 +43,7 @@ func (c channelStorage) List(deviceId string) ([]model.Channel, error) {
 	var list []model.Channel
 	err := c.db.Model(&model.Channel{}).Where("parentId = ?", deviceId).Find(&list).Error
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return nil, err
 	}
 	return list, nil

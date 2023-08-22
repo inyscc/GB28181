@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/inysc/GB28181/internal/gbserver/storage"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	logger1 "github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/inysc/GB28181/internal/pkg/option"
 	"github.com/spf13/viper"
@@ -35,7 +35,7 @@ func GetMySQLFactory() storage.Factory {
 	)
 	once.Do(func() {
 		if err = viper.UnmarshalKey("mysql", &opt); err != nil {
-			log.Error("load mysql config file fail")
+			logger1.Error("load mysql config file fail")
 			panic(err)
 		}
 		dbIns, err = New(&opt)

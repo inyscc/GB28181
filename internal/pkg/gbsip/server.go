@@ -4,7 +4,7 @@ import (
 	"github.com/ghettovoice/gosip"
 	l "github.com/ghettovoice/gosip/log"
 	"github.com/ghettovoice/gosip/sip"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/option"
 )
 
@@ -42,18 +42,18 @@ func NewServer(c *SipConfig) *Server {
 }
 
 func (s *Server) ListenTCP() error {
-	log.Infof("gb server listen tcp: %s", s.host)
+	logger.Infof("gb server listen tcp: %s", s.host)
 	return s.s.Listen("tcp", s.host, nil)
 }
 
 func (s *Server) ListenUDP() error {
-	log.Infof("gb server listen udp: %s", s.host)
+	logger.Infof("gb server listen udp: %s", s.host)
 	return s.s.Listen("udp", s.host, nil)
 }
 
 func (s *Server) Shutdown() error {
 	s.s.Shutdown()
-	log.Info("gb server shutdown...")
+	logger.Info("gb server shutdown...")
 	return nil
 }
 

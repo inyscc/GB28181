@@ -8,7 +8,7 @@ import (
 	"github.com/ghettovoice/gosip"
 	"github.com/ghettovoice/gosip/sip"
 	"github.com/inysc/GB28181/internal/pkg/gbsip"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/inysc/GB28181/internal/pkg/parser"
 	"github.com/inysc/GB28181/internal/pkg/syn"
@@ -49,21 +49,21 @@ var (
 )
 
 func MessageHandler(req sip.Request, tx sip.ServerTransaction) {
-	log.Debugf("收到MESSAGE请求\n%s", printRequest(req))
+	logger.Debugf("收到MESSAGE请求\n%s", printRequest(req))
 	if l, ok := req.ContentLength(); !ok || l.Equals(0) {
 		resp := sip.NewResponseFromRequest("", req, http.StatusOK, http.StatusText(http.StatusOK), "")
-		log.Debug("该MESSAGE消息的消息体长度为0，返回OK\n%s", resp)
+		logger.Debug("该MESSAGE消息的消息体长度为0，返回OK\n%s", resp)
 		_ = tx.Respond(resp)
 	}
 	body := req.Body()
 	cmdType, err := parser.GetCmdTypeFromXML(body)
-	log.Debug("解析出的命令：", cmdType)
+	logger.Debug("解析出的命令：", cmdType)
 	if err != nil {
 		return
 	}
 	handler, ok := messageHandler[cmdType]
 	if !ok {
-		log.Warn("不支持的Message方法实现")
+		logger.Warn("不支持的Message方法实现")
 		return
 	}
 	handler(req, tx)
@@ -101,12 +101,12 @@ type deviceInfo struct {
 func deviceInfoHandler(req sip.Request, tx sip.ServerTransaction) {
 	d := &deviceInfo{}
 	if err := xml.StringDecode(req.Body(), d); err != nil {
-		log.Error("解析deviceInfo响应包出错", err)
+		logger.Error("解析deviceInfo响应包出错", err)
 		return
 	}
 
 	if d.Result != resultOK {
-		log.Errorf("查询设备信息请求结果为%s，请检查", d.Result)
+		logger.Errorf("查询设备信息请求结果为%s，请检查", d.Result)
 		return
 	}
 
@@ -119,7 +119,7 @@ func deviceInfoHandler(req sip.Request, tx sip.ServerTransaction) {
 	}
 
 	if err := storage.updateDeviceInfo(dev); err != nil {
-		log.Error("更新设备信息失败", err)
+		logger.Error("更新设备信息失败", err)
 		return
 	}
 	err := responseAck(tx, req)
@@ -201,12 +201,12 @@ func catalogHandler(req sip.Request, tx sip.ServerTransaction) {
 		b, err := gbkToUtf8([]byte(req.Body()))
 
 		if err != nil {
-			log.Error(err)
+			logger.Error(err)
 			return
 		}
 		err = xml.StringDecode(string(b), &catalog)
 		if err != nil {
-			log.Error(err)
+			logger.Error(err)
 			return
 		}
 	}
@@ -221,7 +221,7 @@ func deviceStatusHandler(req sip.Request, tx sip.ServerTransaction) {
 	status := &gbsip.DeviceStatus{}
 
 	if err := xml.StringDecode(req.Body(), status); err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return
 	}
 	syn.HasSyncTask(fmt.Sprintf("%s_%s", syn.KeyQueryDeviceStatus, status.DeviceID.DeviceID), func(e *syn.Entity) {

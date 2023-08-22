@@ -7,7 +7,7 @@ import (
 	"github.com/inysc/GB28181/internal/config"
 	"github.com/inysc/GB28181/internal/gbserver/storage"
 	"github.com/inysc/GB28181/internal/gbserver/storage/cache"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/inysc/GB28181/internal/pkg/model/constant"
 	util2 "github.com/inysc/GB28181/internal/pkg/util"
@@ -41,7 +41,7 @@ func (m *mediaService) Online(c model.MediaConfig) {
 		newMediaDetail.Default = true
 	}
 	if err := m.store.Media().Save(newMediaDetail); err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return
 	}
 	// please check this stream server if Whether in cache
@@ -53,13 +53,13 @@ func (m *mediaService) Online(c model.MediaConfig) {
 		oldMediaDetail := model.MediaDetail{}
 		err := json.Unmarshal([]byte(cacheDetail.(string)), &oldMediaDetail)
 		if err != nil {
-			log.Error("JSON数据解析到结构体失败!", err)
+			logger.Error("JSON数据解析到结构体失败!", err)
 			return
 		}
 		newMediaDetail.SsrcConfig = oldMediaDetail.SsrcConfig
 	}
 	cache.Set(key, newMediaDetail)
-	log.Info(fmt.Sprintf("ZleMedia流媒体连接成功,id: [ %s ] , addr: [ %s:%v ]", newMediaDetail.ID, newMediaDetail.Ip, newMediaDetail.HttpPort))
+	logger.Info(fmt.Sprintf("ZleMedia流媒体连接成功,id: [ %s ] , addr: [ %s:%v ]", newMediaDetail.ID, newMediaDetail.Ip, newMediaDetail.HttpPort))
 }
 
 // GetRtpServerInfo 从流媒体服务获取rtp明细信息

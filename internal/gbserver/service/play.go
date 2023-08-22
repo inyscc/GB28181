@@ -6,7 +6,7 @@ import (
 
 	"github.com/inysc/GB28181/internal/gbserver/storage/cache"
 	"github.com/inysc/GB28181/internal/pkg/gbsip"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/inysc/GB28181/internal/pkg/model/constant"
 	"github.com/pkg/errors"
@@ -63,7 +63,7 @@ func (p playService) Play(deviceId, channelId string) (model.StreamInfo, error) 
 			}
 		} else {
 			// zlm服务连接失败，重新创建rtp服务并连接
-			log.Errorf("media api response: %+v\n", rtpServerInfo.Msg)
+			logger.Errorf("media api response: %+v\n", rtpServerInfo.Msg)
 			streamInfo = model.StreamInfo{}
 		}
 	}

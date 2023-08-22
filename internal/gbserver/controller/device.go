@@ -8,7 +8,7 @@ import (
 	srv "github.com/inysc/GB28181/internal/gbserver/service"
 	"github.com/inysc/GB28181/internal/gbserver/storage"
 	"github.com/inysc/GB28181/internal/pkg/gbsip"
-	"github.com/inysc/GB28181/internal/pkg/log"
+	"github.com/inysc/GB28181/internal/pkg/logger"
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/inysc/GB28181/internal/pkg/syn"
 	"github.com/pkg/errors"
@@ -46,7 +46,7 @@ func NewDeviceController(store storage.Factory) *DeviceController {
 func (d *DeviceController) List(c *gin.Context) {
 	list, err := d.srv.Devices().List()
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		newResponse(c).fail("")
 		return
 	}
@@ -57,7 +57,7 @@ func (d *DeviceController) List(c *gin.Context) {
 func (d *DeviceController) BasicParamsConfig(ctx *gin.Context) {
 	cfg := &model.DeviceBasicConfigReq{}
 	if err := ctx.ShouldBindJSON(cfg); err != nil {
-		log.Error(err)
+		logger.Error(err)
 		newResponse(ctx).fail("请求失败")
 		return
 	}
@@ -87,7 +87,7 @@ func (d *DeviceController) BasicParamsQuery(ctx *gin.Context) {
 		return
 	}
 	if err := gbsip.DeviceBasicConfigQuery(device); err != nil {
-		log.Error(err)
+		logger.Error(err)
 		newResponse(ctx).fail("fail")
 		return
 	}
@@ -99,7 +99,7 @@ func (d *DeviceController) BasicParamsQuery(ctx *gin.Context) {
 			newResponse(ctx).fail(errDeviceBasicConfigQueryTimeOut.Error())
 			return
 		}
-		log.Error(err)
+		logger.Error(err)
 		newResponse(ctx).fail(errDeviceBasicConfigQuery.Error())
 		return
 	}
@@ -116,7 +116,7 @@ func (d *DeviceController) StatusQuery(ctx *gin.Context) {
 
 	entity := syn.NewDelayTask(fmt.Sprintf("%s_%s", syn.KeyQueryDeviceStatus, deviceId), 3*time.Second)
 	if err := gbsip.DeviceStatusQuery(device); err != nil {
-		log.Error(err)
+		logger.Error(err)
 		newResponse(ctx).fail(errDeviceStatusQuery.Error())
 		return
 	}
@@ -126,7 +126,7 @@ func (d *DeviceController) StatusQuery(ctx *gin.Context) {
 			newResponse(ctx).fail(errDeviceStatusQueryTimeOut.Error())
 			return
 		}
-		log.Error(err)
+		logger.Error(err)
 		newResponse(ctx).fail(errDeviceStatusQuery.Error())
 		return
 	}
