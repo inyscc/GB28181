@@ -1,12 +1,13 @@
 package parser
 
 import (
+	"crypto/rand"
 	"encoding/xml"
 	"fmt"
 	"io"
-	"math/rand"
+	"math/big"
+	"strconv"
 	"strings"
-	"time"
 
 	"github.com/beevik/etree"
 	"github.com/inysc/GB28181/internal/pkg/logger"
@@ -16,17 +17,27 @@ import (
 	"golang.org/x/text/transform"
 )
 
-type QueryType string
-type ControlType string
+type (
+	Name = xml.Name
 
-type WithKeyValue func(element *etree.Element)
+	QueryType   string
+	ControlType string
 
-const (
-	DeviceConfig  ControlType = "DeviceConfig"
-	DeviceControl ControlType = "DeviceControl"
+	WithKeyValue func(element *etree.Element)
 )
 
 const (
+	DeviceConfig    ControlType = "DeviceConfig"
+	DeviceControl   ControlType = "DeviceControl"
+	DeviceUpgrade   ControlType = "DeviceUpgrade"
+	RecordDownload  ControlType = "RecordDownload"
+	DeviceCapture   ControlType = "DeviceCapture"
+	DeviceRestart   ControlType = "DeviceRestart"
+	DeviceRestore   ControlType = "DeviceRestore"
+	DeviceDelete    ControlType = "DeviceDelete"
+	DeviceKeepalive ControlType = "DeviceKeepalive"
+	DeviceStatus    ControlType = "DeviceStatus"
+
 	DeviceStatusCmdType   QueryType = "DeviceStatus"
 	CatalogCmdType        QueryType = "Catalog"
 	DeviceInfoCmdType     QueryType = "DeviceInfo"
@@ -122,8 +133,11 @@ func WithCustomKV(k, v string) WithKeyValue {
 }
 
 func getSN() string {
-	rand.Seed(time.Now().UnixMilli())
-	return cast.ToString(rand.Intn(10) * 9876)
+	i, err := rand.Int(rand.Reader, big.NewInt(10))
+	if err != nil {
+		return "9876"
+	}
+	return strconv.FormatInt((i.Int64()+1)*9876, 10)
 }
 
 // GetCmdTypeFromXML 根据body获取XML配置文件中的根元素
@@ -201,4 +215,17 @@ re:
 		}
 	}
 	return key, v, nil
+}
+
+func XmlStringDecode(body string, x any) error {
+	decoder := xml.NewDecoder(strings.NewReader(body))
+	decoder.CharsetReader = func(charset string, input io.Reader) (io.Reader, error) {
+		switch charset {
+		case "GB2312":
+			return transform.NewReader(input, simplifiedchinese.GB18030.NewDecoder()), nil
+		default:
+			return input, nil
+		}
+	}
+	return decoder.Decode(x)
 }

@@ -5,12 +5,12 @@ import (
 )
 
 type SIPOptions struct {
-	Ip        string `json:"ip,omitempty" mapstructure:"ip"`
-	Port      string `json:"port,omitempty" mapstructure:"port"`
-	Domain    string `json:"domain,omitempty" mapstructure:"domain"`
-	Id        string `json:"id" mapstructure:"id"`
-	Password  string `json:"password,omitempty" mapstructure:"password"`
-	UserAgent string `json:"user-agent" mapstructure:"user-agent"`
+	Ip        string `json:"ip,omitempty"        mapstructure:"ip"`
+	Port      string `json:"port,omitempty"      mapstructure:"port"`
+	Domain    string `json:"domain,omitempty"    mapstructure:"domain"`
+	Id        string `json:"id"                  mapstructure:"id"`
+	Password  string `json:"password,omitempty"  mapstructure:"password"`
+	UserAgent string `json:"user-agent"          mapstructure:"user-agent"`
 }
 
 func newSIPOptions() *SIPOptions {

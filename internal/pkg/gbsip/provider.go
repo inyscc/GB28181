@@ -177,7 +177,7 @@ func (f sipFactory) createByeRequest(channelId string, device model.Device, tx S
 		SetCallID(&callID).
 		SetSeqNo(cast.ToUint(ceq)).
 		SetRecipient(&sip.SipUri{
-			FUser: sip.String{channelId},
+			FUser: sip.String{Str: channelId},
 			FHost: device.Ip,
 		}).Build()
 

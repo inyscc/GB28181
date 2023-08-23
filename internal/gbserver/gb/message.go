@@ -2,6 +2,7 @@ package gb
 
 import (
 	"bytes"
+	"encoding/xml"
 	"fmt"
 	"net/http"
 
@@ -12,7 +13,6 @@ import (
 	"github.com/inysc/GB28181/internal/pkg/model"
 	"github.com/inysc/GB28181/internal/pkg/parser"
 	"github.com/inysc/GB28181/internal/pkg/syn"
-	"github.com/inysc/GB28181/internal/pkg/xml"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
 )
@@ -100,7 +100,7 @@ type deviceInfo struct {
 
 func deviceInfoHandler(req sip.Request, tx sip.ServerTransaction) {
 	d := &deviceInfo{}
-	if err := xml.StringDecode(req.Body(), d); err != nil {
+	if err := parser.XmlStringDecode(req.Body(), d); err != nil {
 		logger.Error("解析deviceInfo响应包出错", err)
 		return
 	}
@@ -194,7 +194,7 @@ func catalogHandler(req sip.Request, tx sip.ServerTransaction) {
 
 	catalog := DeviceCatalogResponse{}
 
-	err := xml.StringDecode(req.Body(), &catalog)
+	err := parser.XmlStringDecode(req.Body(), &catalog)
 
 	if err != nil {
 		// maybe charset is GBK, so take request body convert utf8
@@ -204,7 +204,7 @@ func catalogHandler(req sip.Request, tx sip.ServerTransaction) {
 			logger.Error(err)
 			return
 		}
-		err = xml.StringDecode(string(b), &catalog)
+		err = parser.XmlStringDecode(string(b), &catalog)
 		if err != nil {
 			logger.Error(err)
 			return
@@ -220,7 +220,7 @@ func deviceStatusHandler(req sip.Request, tx sip.ServerTransaction) {
 	}()
 	status := &gbsip.DeviceStatus{}
 
-	if err := xml.StringDecode(req.Body(), status); err != nil {
+	if err := parser.XmlStringDecode(req.Body(), status); err != nil {
 		logger.Error(err)
 		return
 	}

@@ -14,7 +14,6 @@ func SendPost(url string, params map[string]interface{}) (b string, err error) {
 	client.Post(url).SendMap(params).
 		Timeout(3 * time.Second).
 		End(func(response gorequest.Response, body string, errs []error) {
-
 			if response.StatusCode != http.StatusOK || errs != nil {
 				logger.Error(errs)
 				err = errs[0]
